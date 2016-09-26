@@ -8,7 +8,7 @@
  * gn3544
  * 16480
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/whitenick/Project-3-Word-Ladder
  * Fall 2016
  */
 
