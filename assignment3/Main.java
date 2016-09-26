@@ -1,9 +1,9 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * Nicholas White
+ * Nww295	
+ * 16465
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
@@ -16,6 +16,7 @@
 package assignment3;
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 public class Main {
 	
@@ -59,7 +60,7 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO some code
+		// TODO more code 
 		Set<String> dict = makeDictionary();
 		// TODO more code
 		
