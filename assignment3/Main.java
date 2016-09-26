@@ -4,9 +4,9 @@
  * Nicholas White
  * Nww295	
  * 16465
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Gaurav Nagar
+ * gn3544
+ * 16480
  * Slip days used: <0>
  * Git URL:
  * Fall 2016
