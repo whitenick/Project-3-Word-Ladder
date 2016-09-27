@@ -71,7 +71,8 @@ public class Main {
 		ArrayList<wordArray> nodes = new ArrayList<wordArray>();
 		
 		for(int k = 0; k < nodeInitial.size(); k++){
-			 nodes.get(k).word = nodeInitial.get(k);
+			wordArray word = new wordArray(nodeInitial.get(k));
+			nodes.add(word);
 		}
 		
 		if (nodes.get(0).word != null){
