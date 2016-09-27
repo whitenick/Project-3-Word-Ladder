@@ -1,28 +1,34 @@
 package assignment3;
 
 public class wordNode {
-	int marker = 0;
-	String word;
-	public wordNode() {
-		this.word = null;
+	
+	private int marker;
+	private String word;
+	
+	public wordNode(String word) {
+		
+		this.word = word;
 		this.marker = 0;
 	}
 	
-	
-}
-
-//subclass for initializing the word nodes 
-class wordArray extends wordNode {
-	
-	public wordArray() {
+	public String getWord(){
 		
+		return word;
 	}
 	
-	public wordArray(String inputWord) {
-		super();
-		this.word = inputWord;
+	public int getMarker(){
 		
-		// TODO Auto-generated constructor stub
+		return marker;
+	}
+	
+	public void setWord(String word){
+		
+		this.word = word;
+	}
+	
+	public void setMarker(int marker){
+		
+		this.marker = marker;
 	}
 	
 }

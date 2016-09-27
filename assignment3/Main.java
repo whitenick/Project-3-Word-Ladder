@@ -20,6 +20,8 @@ import java.lang.*;
 
 public class Main {
 	
+	private static ArrayList<wordNode> nodeArr;
+	private static HashMap<wordNode, ArrayList<wordNode>> graph;
 	// static variables and constants only here.
 	
 	public static void main(String[] args) throws Exception {
@@ -35,49 +37,38 @@ public class Main {
 			kb = new Scanner(System.in);// default from Stdin
 			ps = System.out;			// default to Stdout
 		}
-		
-		//For initial testing of preprocessing 
-		//Debug
-		
-		kb.close();
-		File testFile = new File("five_letter_words.txt");
-		kb = new Scanner (testFile);
-		initialize(kb);
+		initialize();
 		return;
 		// TODO methods to read in words, output ladder
 	}
 	
-	public static void initialize(Scanner kb) {
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
+	private static boolean edgeExists(wordNode wordOne, wordNode wordTwo){
 		
-		//initializing with scanner and outputing ArrayList to Class 
+		int difference = 0;
+		if (wordOne.getWord().length() != wordTwo.getWord().length()){
+			return false;
+		}
+		for (int i = 0; i < wordOne.getWord().length(); i++){
+			if (wordOne.getWord().charAt(i) != wordTwo.getWord().charAt(i)){
+				difference++;
+			}
+		}
+		if (difference > 1){
+			return false;
+		}
+		return true;
+	}
+	
+	public static void initialize() {
 		
-		//debug
 		boolean inputSuccess = false;
 		
-		
-		//Retrieve privately accessed array list 
-		
-		
-		
-		ArrayList<String> nodeInitial = new ArrayList<String>();
-		
-		//Populate ArrayList 
-		
-		nodeInitial = InputDictionary.initializeNodes(nodeInitial, kb);
-		
-		ArrayList<wordArray> nodes = new ArrayList<wordArray>();
-		
-		for(int k = 0; k < nodeInitial.size(); k++){
-			wordArray word = new wordArray(nodeInitial.get(k));
-			nodes.add(word);
+		Set<String> dict = makeDictionary();
+		for (String str: dict){
+			wordNode newNode = new wordNode(str);
+			nodeArr.add(newNode);
 		}
-		
-		if (nodes.get(0).word != null){
-			inputSuccess = true;
-		}
+		makeGraph();
 		
 	}
 	
@@ -127,6 +118,23 @@ public class Main {
 			words.add(infile.next().toUpperCase());
 		}
 		return words;
+	}
+	
+	private static void makeGraph(){
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			graph.put(nodeArr.get(i), new ArrayList<wordNode>());
+		}
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			for (int j = i; j < nodeArr.size(); j++){
+				if (edgeExists(nodeArr.get(i), nodeArr.get(j))){
+					graph.get(nodeArr.get(i)).add(nodeArr.get(j));
+					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
+				}
+			}
+		}
+		
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
