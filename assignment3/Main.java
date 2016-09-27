@@ -35,17 +35,53 @@ public class Main {
 			kb = new Scanner(System.in);// default from Stdin
 			ps = System.out;			// default to Stdout
 		}
-		initialize();
 		
+		//For initial testing of preprocessing 
+		//Debug
+		
+		kb.close();
+		File testFile = new File("five_letter_words.txt");
+		kb = new Scanner (testFile);
+		initialize(kb);
+		return;
 		// TODO methods to read in words, output ladder
 	}
 	
-	public static void initialize() {
+	public static void initialize(Scanner kb) {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		
+		//initializing with scanner and outputing ArrayList to Class 
+		
+		//debug
+		boolean inputSuccess = false;
+		
+		
+		//Retrieve privately accessed array list 
+		
+		
+		
+		ArrayList<String> nodeInitial = new ArrayList<String>();
+		
+		//Populate ArrayList 
+		
+		nodeInitial = InputDictionary.initializeNodes(nodeInitial, kb);
+		
+		ArrayList<wordArray> nodes = new ArrayList<wordArray>();
+		
+		for(int k = 0; k < nodeInitial.size(); k++){
+			 nodes.get(k).word = nodeInitial.get(k);
+		}
+		
+		if (nodes.get(0).word != null){
+			inputSuccess = true;
+		}
+		
 	}
 	
+	
+
 	/**
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of 2 Strings containing start word and end word. 
