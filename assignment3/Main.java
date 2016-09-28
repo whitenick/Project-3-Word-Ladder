@@ -22,6 +22,7 @@ public class Main {
 	
 	private static ArrayList<wordNode> nodeArr;
 	private static HashMap<wordNode, ArrayList<wordNode>> graph;
+	private static HashMap<wordNode, Integer> getIndex;
 	// static variables and constants only here.
 	
 	public static void main(String[] args) throws Exception {
@@ -74,7 +75,9 @@ public class Main {
 			nodeArr.add(newNode);
 		}
 		makeGraph();
-		
+		for (int i = 0; i<nodeArr.size(); i++) {
+			getIndex.put(nodeArr.get(i), i);
+		}
 	}
 	
 	
@@ -109,8 +112,22 @@ public class Main {
 		
 		DFSVisit(nodeArr.get(startIndex), nodeArr.get(endIndex));
 		// TODO more code
+		ArrayList<String> wordLadder = new ArrayList<String>();
 		
-		return null; // replace this line later with real return
+		wordNode currentNode = new wordNode(null);
+		
+		int currentIndex = endIndex;
+		
+		while(startIndex != currentIndex){
+				wordLadder.add(nodeArr.get(currentIndex).getWord());
+				currentIndex = getIndex.get(nodeArr.get(currentIndex).getPrev());
+		}
+		
+		wordLadder.add(nodeArr.get(startIndex).getWord());
+		
+		Collections.reverse(wordLadder);
+		
+		return wordLadder; // replace this line later with real return
 	}
 		
 	
