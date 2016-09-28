@@ -101,8 +101,21 @@ public class Main {
 	}
 	
 	public static void DFSVisit(wordNode start, wordNode end){
-
 		
+		if (start.equals(end)){
+			end.setMarker(2);
+		}
+		else{
+			//sort graph.get(size) based on closeness to end
+			start.setMarker(1);
+			for (int i = 0; i < graph.get(start).size(); i++){ //Exploring neighbors
+				if (graph.get(start).get(i).getMarker() == 0){
+					graph.get(start).get(i).setPrev(start);
+					DFSVisit(graph.get(start).get(i), end);
+				}
+			}
+			start.setMarker(2);
+		}
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
