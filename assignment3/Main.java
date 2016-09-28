@@ -93,12 +93,26 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO more code 
-		Set<String> dict = makeDictionary();
+		// TODO more code
+		
+		int startIndex = 0;
+		int endIndex = 0;
+		
+		for(int i = 0; i<nodeArr.size(); i++) {
+			if(nodeArr.get(i).getWord().equals(start)){
+				startIndex = i;
+			}
+			if(nodeArr.get(i).getWord().equals(end)) {
+				endIndex = i;
+			}
+		}
+		
+		DFSVisit(nodeArr.get(startIndex), nodeArr.get(endIndex));
 		// TODO more code
 		
 		return null; // replace this line later with real return
 	}
+		
 	
 	public static void DFSVisit(wordNode start, wordNode end){
 		
