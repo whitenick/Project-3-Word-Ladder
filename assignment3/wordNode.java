@@ -1,28 +1,46 @@
 package assignment3;
 
 public class wordNode {
-	int marker = 0;
-	String word;
-	public wordNode() {
-		this.word = null;
+	
+	private wordNode prev;
+	private int marker;
+	private String word;
+	
+	public wordNode(String word) {
+		
+		this.prev = null;
+		this.word = word;
 		this.marker = 0;
 	}
 	
-	
-}
-
-//subclass for initializing the word nodes 
-class wordArray extends wordNode {
-	
-	public wordArray() {
+	public wordNode getPrev(){
 		
+		return prev;
 	}
 	
-	public wordArray(String inputWord) {
-		super();
-		this.word = inputWord;
+	public String getWord(){
 		
-		// TODO Auto-generated constructor stub
+		return word;
+	}
+	
+	public int getMarker(){
+		
+		return marker;
+	}
+	
+	public void setWord(String word){
+		
+		this.word = word;
+	}
+	
+	public void setMarker(int marker){
+		
+		this.marker = marker;
+	}
+	
+	public void setPrev(wordNode prev){
+		
+		this.prev = prev;
 	}
 	
 }
