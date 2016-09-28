@@ -40,58 +40,26 @@ public class Main {
 			kb = new Scanner(System.in);// default from Stdin
 			ps = System.out;			// default to Stdout
 		}
-
 		initialize();
 		ArrayList<String> words = parse(kb);
 		if (words == null){
 			System.out.println("You messed up.");
 			return ;
 		}
-		else if (words.size() == 1){
+		else if (words.size() == 0){
 			System.out.println("Quitting...");
 			return ;
 		}
+		long begin =System.nanoTime(); //use for time
 		printLadder(getWordLadderDFS(startWord, endWord));
-	}
-	
-
-	private static boolean edgeExists(wordNode wordOne, wordNode wordTwo){
-
-		
-		int difference = 0;
-		if (wordOne.getWord().length() != wordTwo.getWord().length()){
-			return false;
-		}
-		for (int i = 0; i < wordOne.getWord().length(); i++){
-			if (wordOne.getWord().charAt(i) != wordTwo.getWord().charAt(i)){
-				difference++;
-			}
-		}
-		if (difference > 1){
-			return false;
-		}
-		return true;
-	}
-	
-	private static void makeGraph(){
-		
-		for (int i = 0; i < nodeArr.size(); i++){
-			graph.put(nodeArr.get(i), new ArrayList<wordNode>());
-		}
-		
-		for (int i = 0; i < nodeArr.size(); i++){
-			for (int j = i; j < nodeArr.size(); j++){
-				if (edgeExists(nodeArr.get(i), nodeArr.get(j))){
-					graph.get(nodeArr.get(i)).add(nodeArr.get(j));
-					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
-				}
-			}
-		}
-		
+		long end = System.nanoTime();
+		System.out.println("Time taken: " + (end - begin)/1000000 + " ms");
 	}
 	
 	public static void initialize() {
 		
+		nodeArr = new ArrayList<wordNode>();
+		getIndex = new HashMap<wordNode, Integer>();
 		Set<String> dict = makeDictionary();
 		for (String str: dict){
 			wordNode newNode = new wordNode(str);
@@ -135,13 +103,18 @@ public class Main {
 		startIndex = 0;
 		endIndex = 0;
 		
-		for(int i = 0; i<nodeArr.size(); i++) {
-			if(nodeArr.get(i).getWord().equals(start)){
+		for(int i = 0; i < nodeArr.size(); i++) {
+			if(nodeArr.get(i).getWord().toLowerCase().equals(start)){
 				startIndex = i;
 			}
-			if(nodeArr.get(i).getWord().equals(end)) {
+			if(nodeArr.get(i).getWord().toLowerCase().equals(end)) {
 				endIndex = i;
 			}
+		}
+		if (startIndex == endIndex){ //special case
+			wordLadder.add(nodeArr.get(startIndex).getWord());
+			wordLadder.add(nodeArr.get(endIndex).getWord());
+			return wordLadder;
 		}
 		
 		DFSVisit(nodeArr.get(startIndex), nodeArr.get(endIndex));
@@ -163,7 +136,6 @@ public class Main {
 		return wordLadder;
 	}
 		
-	
 	public static void DFSVisit(wordNode start, wordNode end){
 		
 		if (start.equals(end)){
@@ -210,7 +182,51 @@ public class Main {
 	
 	public static void printLadder(ArrayList<String> ladder) {
 		
+		if (ladder.size() == 0){
+			System.out.println("no word ladder can be found between " + startWord + " and " + endWord + ".");
+			return ;
+		}
+		else{
+			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " + startWord + " and " + endWord + ".");
+			for (int i = 0; i < ladder.size(); i++){
+				System.out.println(ladder.get(i).toLowerCase());
+			}
+		}
 	}
-	// TODO
-	// Other private static methods here
+	
+	private static boolean edgeExists(wordNode wordOne, wordNode wordTwo){
+		
+		int difference = 0;
+		if (wordOne.getWord().length() != wordTwo.getWord().length()){
+			return false;
+		}
+		for (int i = 0; i < wordOne.getWord().length(); i++){
+			if (wordOne.getWord().charAt(i) != wordTwo.getWord().charAt(i)){
+				difference++;
+			}
+		}
+		if (difference > 1){
+			return false;
+		}
+		return true;
+	}
+	
+	private static void makeGraph(){
+		
+		graph = new HashMap<wordNode, ArrayList<wordNode>>();
+		for (int i = 0; i < nodeArr.size(); i++){
+			graph.put(nodeArr.get(i), new ArrayList<wordNode>());
+		}
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			for (int j = i; j < nodeArr.size(); j++){
+				if (edgeExists(nodeArr.get(i), nodeArr.get(j))){
+					graph.get(nodeArr.get(i)).add(nodeArr.get(j));
+					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
+				}
+			}
+		}
+		
+	}
+	
 }
