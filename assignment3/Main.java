@@ -23,6 +23,8 @@ public class Main {
 	private static ArrayList<wordNode> nodeArr;
 	private static HashMap<wordNode, ArrayList<wordNode>> graph;
 	private static HashMap<wordNode, Integer> getIndex;
+	private static String startWord;
+	private static String endWord;
 	// static variables and constants only here.
 	
 	public static void main(String[] args) throws Exception {
@@ -40,9 +42,16 @@ public class Main {
 		}
 
 		initialize();
-
-		return;
-		// TODO methods to read in words, output ladder
+		ArrayList<String> words = parse(kb);
+		if (words == null){
+			System.out.println("You messed up.");
+			return ;
+		}
+		else if (words.size() == 1){
+			System.out.println("Quitting...");
+			return ;
+		}
+		printLadder(getWordLadderDFS(startWord, endWord));
 	}
 	
 
@@ -64,23 +73,35 @@ public class Main {
 		return true;
 	}
 	
+	private static void makeGraph(){
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			graph.put(nodeArr.get(i), new ArrayList<wordNode>());
+		}
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			for (int j = i; j < nodeArr.size(); j++){
+				if (edgeExists(nodeArr.get(i), nodeArr.get(j))){
+					graph.get(nodeArr.get(i)).add(nodeArr.get(j));
+					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
+				}
+			}
+		}
+		
+	}
+	
 	public static void initialize() {
 		
-		boolean inputSuccess = false;
-		
-
 		Set<String> dict = makeDictionary();
 		for (String str: dict){
 			wordNode newNode = new wordNode(str);
 			nodeArr.add(newNode);
 		}
-		makeGraph();
-		for (int i = 0; i<nodeArr.size(); i++) {
+		for (int i = 0; i < nodeArr.size(); i++) {
 			getIndex.put(nodeArr.get(i), i);
 		}
+		makeGraph();
 	}
-	
-	
 
 	/**
 	 * @param keyboard Scanner connected to System.in
@@ -88,7 +109,18 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
+		
+		String input;
+		input = keyboard.nextLine();
+		if (input.equals("quit")){
+			return new ArrayList<String>();
+		}
+		ArrayList<String> inputArr = new ArrayList<String>(Arrays.asList(input.split(" ")));
+		if (inputArr.size() == 2){
+			startWord = inputArr.get(0);
+			endWord = inputArr.get(1);
+			return inputArr;
+		}
 		return null;
 	}
 	
@@ -98,8 +130,10 @@ public class Main {
 		// Return empty list if no ladder.
 		// TODO more code
 		
-		int startIndex = 0;
-		int endIndex = 0;
+		int startIndex, endIndex, currentIndex;
+		ArrayList<String> wordLadder = new ArrayList<String>();
+		startIndex = 0;
+		endIndex = 0;
 		
 		for(int i = 0; i<nodeArr.size(); i++) {
 			if(nodeArr.get(i).getWord().equals(start)){
@@ -111,23 +145,22 @@ public class Main {
 		}
 		
 		DFSVisit(nodeArr.get(startIndex), nodeArr.get(endIndex));
-		// TODO more code
-		ArrayList<String> wordLadder = new ArrayList<String>();
+		currentIndex = endIndex;
 		
-		wordNode currentNode = new wordNode(null);
-		
-		int currentIndex = endIndex;
-		
-		while(startIndex != currentIndex){
+		while(currentIndex != startIndex){
 				wordLadder.add(nodeArr.get(currentIndex).getWord());
+				if (nodeArr.get(currentIndex).getPrev() == null){
+					break;
+				}
 				currentIndex = getIndex.get(nodeArr.get(currentIndex).getPrev());
 		}
 		
+		if (currentIndex != startIndex){ //if a link doesn't exist between start and end
+			return new ArrayList<String>();
+		}
 		wordLadder.add(nodeArr.get(startIndex).getWord());
-		
 		Collections.reverse(wordLadder);
-		
-		return wordLadder; // replace this line later with real return
+		return wordLadder;
 	}
 		
 	
@@ -137,15 +170,15 @@ public class Main {
 			end.setMarker(2);
 		}
 		else{
-			//sort graph.get(size) based on closeness to end
-			start.setMarker(1);
-			for (int i = 0; i < graph.get(start).size(); i++){ //Exploring neighbors
+			//TODO: sort graph.get(size) based on closeness to end
+			start.setMarker(1); //start node is visited
+			for (int i = 0; i < graph.get(start).size(); i++){ //Exploring unvisited neighbors
 				if (graph.get(start).get(i).getMarker() == 0){
 					graph.get(start).get(i).setPrev(start);
 					DFSVisit(graph.get(start).get(i), end);
 				}
 			}
-			start.setMarker(2);
+			start.setMarker(2); //start node is explored
 		}
 	}
 	
@@ -173,23 +206,6 @@ public class Main {
 			words.add(infile.next().toUpperCase());
 		}
 		return words;
-	}
-	
-	private static void makeGraph(){
-		
-		for (int i = 0; i < nodeArr.size(); i++){
-			graph.put(nodeArr.get(i), new ArrayList<wordNode>());
-		}
-		
-		for (int i = 0; i < nodeArr.size(); i++){
-			for (int j = i; j < nodeArr.size(); j++){
-				if (edgeExists(nodeArr.get(i), nodeArr.get(j))){
-					graph.get(nodeArr.get(i)).add(nodeArr.get(j));
-					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
-				}
-			}
-		}
-		
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
