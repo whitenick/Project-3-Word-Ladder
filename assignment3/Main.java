@@ -42,12 +42,14 @@ public class Main {
 		kb.close();
 		File testFile = new File("five_letter_words.txt");
 		kb = new Scanner (testFile);
-		initialize(kb);
+		ArrayList<wordArray> words = new ArrayList<wordArray>();
+		words = initialize(kb);
 		return;
 		// TODO methods to read in words, output ladder
 	}
 	
-	public static void initialize(Scanner kb) {
+	public static ArrayList<wordArray> initialize(Scanner kb) {
+		
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
@@ -77,7 +79,9 @@ public class Main {
 		
 		if (nodes.get(0).word != null){
 			inputSuccess = true;
+			return nodes;
 		}
+		return nodes;
 		
 	}
 	
