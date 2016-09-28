@@ -43,4 +43,18 @@ public class wordNode {
 		this.prev = prev;
 	}
 	
+	@Override
+	public boolean equals(Object otherObject){
+		
+		wordNode otherNode = (wordNode) otherObject;
+		
+		if (otherNode == this){ //for the base case
+			return true;
+		}
+		if (this.getWord().equals(otherNode.getWord())){
+			return true;
+		}
+		return false;
+		
+	}
 }
