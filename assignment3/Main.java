@@ -41,19 +41,21 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		ArrayList<String> words = parse(kb);
-		if (words == null){
-			System.out.println("You messed up.");
-			return ;
+		while (true){ //TESTING
+			ArrayList<String> words = parse(kb);
+			if (words == null){
+				System.out.println("You messed up.");
+				//return ;
+			}
+			else if (words.size() == 0){
+				System.out.println("Quitting...");
+				break;
+			}
+			long begin =System.nanoTime(); //use for time
+			printLadder(getWordLadderDFS(startWord, endWord));
+			long end = System.nanoTime();
+			System.out.println("Time taken: " + (end - begin)/1000000 + " ms");
 		}
-		else if (words.size() == 0){
-			System.out.println("Quitting...");
-			return ;
-		}
-		long begin =System.nanoTime(); //use for time
-		printLadder(getWordLadderDFS(startWord, endWord));
-		long end = System.nanoTime();
-		System.out.println("Time taken: " + (end - begin)/1000000 + " ms");
 	}
 	
 	public static void initialize() {
@@ -79,7 +81,7 @@ public class Main {
 	public static ArrayList<String> parse(Scanner keyboard) {
 		
 		String input;
-		input = keyboard.nextLine();
+		input = keyboard.nextLine().toLowerCase();
 		if (input.equals("quit")){
 			return new ArrayList<String>();
 		}
@@ -96,12 +98,13 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO more code
 		
 		int startIndex, endIndex, currentIndex;
 		ArrayList<String> wordLadder = new ArrayList<String>();
 		startIndex = 0;
 		endIndex = 0;
+		
+		reinitializeNodes();
 		
 		for(int i = 0; i < nodeArr.size(); i++) {
 			if(nodeArr.get(i).getWord().toLowerCase().equals(start)){
@@ -164,6 +167,24 @@ public class Main {
 		return null; // replace this line later with real return
 	}
     
+    public static void BFSVisit(wordNode start, wordNode end){
+    	
+    	Queue<wordNode> queue = new LinkedList<wordNode>();
+    	queue.add(start);
+    	start.setMarker(1);
+    	while (!queue.isEmpty()){
+    		for (int i = 0; i < graph.get(queue.peek()).size(); i++){
+    			if (graph.get(queue.peek()).get(i).getMarker() == 0){
+    				graph.get(queue.peek()).get(i).setPrev(queue.peek());
+    				graph.get(queue.peek()).get(i).setMarker(1);
+    				queue.add(graph.get(queue.peek()).get(i));
+    			}
+    		}
+    		queue.peek().setMarker(2); //node explored
+    		queue.poll();
+    	}
+    }
+    
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
@@ -225,6 +246,25 @@ public class Main {
 					graph.get(nodeArr.get(j)).add(nodeArr.get(i));
 				}
 			}
+		}
+	}
+	
+	private static int numVisited(){
+		
+		int num = 0;
+		for (int i = 0; i < nodeArr.size(); i++){
+			if (nodeArr.get(i).getMarker() != 0){
+				num++;
+			}
+		}
+		return num++;
+	}
+	
+	private static void reinitializeNodes(){
+		
+		for (int i = 0; i < nodeArr.size(); i++){
+			nodeArr.get(i).setMarker(0);
+			nodeArr.get(i).setPrev(null);
 		}
 		
 	}
